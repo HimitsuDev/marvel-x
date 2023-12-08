@@ -22,5 +22,4 @@ interface EndPoint {
                           @Query("apikey") apikey: String = KeysRep.apikey,
                           @Query("hash") hash: String = KeysRep.hash): Call<Characters>
 
-
 }

@@ -25,8 +25,6 @@ class ViewModelMarvel: ViewModel() {
     var marvelAllCharacteres = _marvelAllCharacteres.asStateFlow()
 
 
-
-
     fun getCharacters(id: String ) = viewModelScope.launch{
         try {
             val retrofitClient = NetworkUtils

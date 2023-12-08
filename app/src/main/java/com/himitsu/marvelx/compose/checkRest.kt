@@ -41,7 +41,6 @@ fun checkRest(viewModel: ViewModelMarvel){
             exibirName(personagem)
         }
 
-
     }
 }
 @Composable
