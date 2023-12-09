@@ -1,6 +1,5 @@
 package com.himitsu.marvelx
 
-import android.media.audiofx.LoudnessEnhancer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,7 +14,6 @@ import androidx.navigation.compose.rememberNavController
 import com.himitsu.marvelx.compose.checkRest
 import com.himitsu.marvelx.model.ViewModelMarvel
 import com.himitsu.marvelx.ui.theme.MARVELXTheme
-
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.himitsu.marvelx.compose.SelectCompose
@@ -26,7 +24,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val viewModel by viewModels<ViewModelMarvel>()
-
 
         setContent {
             MARVELXTheme {
@@ -40,10 +37,9 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
-
+    }
     }
 
-    }
 }
 @Composable
 fun MyAppHost(navHostController: NavHostController = rememberNavController(),
@@ -56,5 +52,3 @@ fun MyAppHost(navHostController: NavHostController = rememberNavController(),
 
     }
 }
-
-
