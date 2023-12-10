@@ -16,7 +16,9 @@ import com.himitsu.marvelx.model.ViewModelMarvel
 import com.himitsu.marvelx.ui.theme.MARVELXTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.himitsu.marvelx.compose.CharacteresCompose
 import com.himitsu.marvelx.compose.SelectCompose
+import com.himitsu.marvelx.compose.ComicsCompose
 
 
 class MainActivity : ComponentActivity() {
@@ -47,8 +49,11 @@ fun MyAppHost(navHostController: NavHostController = rememberNavController(),
               startDestination: String = "SelectCompose"){
 
     NavHost(navController = navHostController, startDestination = startDestination) {
-        composable("SelectCompose"){ SelectCompose(viewModel)}
+        composable("SelectCompose"){ SelectCompose(viewModel, navHostController)}
         composable("checkRest"){ checkRest(viewModel)}
+        composable("CharacteresCompose"){ CharacteresCompose(viewModel, navHostController)}
+        composable("ComicsCompose"){ ComicsCompose(viewModel, navHostController) }
+        composable("ComicsCompose"){ComicsCompose(viewModel, navHostController)}
 
     }
 }

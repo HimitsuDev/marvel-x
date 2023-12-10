@@ -5,13 +5,13 @@ plugins {
 
 android {
     namespace = "com.himitsu.marvelx"
-    compileSdk = 34
+    compileSdk = 34 //34
 
 
     defaultConfig {
         applicationId = "com.himitsu.marvelx"
-        minSdk = 30 //25
-        targetSdk = 34
+        minSdk = 25 //25
+        targetSdk = 34 //34
         versionCode = 1
         versionName = "1.0"
 
