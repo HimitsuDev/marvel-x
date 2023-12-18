@@ -10,15 +10,15 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.himitsu.marvelx.compose.checkRest
-import com.himitsu.marvelx.model.ViewModelMarvel
-import com.himitsu.marvelx.ui.theme.MARVELXTheme
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.himitsu.marvelx.compose.CharacteresCompose
-import com.himitsu.marvelx.compose.SelectCompose
 import com.himitsu.marvelx.compose.ComicsCompose
+import com.himitsu.marvelx.compose.ComicsDetailsCompose
+import com.himitsu.marvelx.compose.SelectCompose
+import com.himitsu.marvelx.model.ViewModelMarvel
+import com.himitsu.marvelx.ui.theme.MARVELXTheme
 
 
 class MainActivity : ComponentActivity() {
@@ -32,16 +32,16 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MyAppHost(navController, viewModel)
 
+                    MyAppHost(navController, viewModel)
                 }
             }
     }
     }
-
 }
 @Composable
 fun MyAppHost(navHostController: NavHostController = rememberNavController(),
@@ -50,10 +50,11 @@ fun MyAppHost(navHostController: NavHostController = rememberNavController(),
 
     NavHost(navController = navHostController, startDestination = startDestination) {
         composable("SelectCompose"){ SelectCompose(viewModel, navHostController)}
-        composable("checkRest"){ checkRest(viewModel)}
         composable("CharacteresCompose"){ CharacteresCompose(viewModel, navHostController)}
         composable("ComicsCompose"){ ComicsCompose(viewModel, navHostController) }
         composable("ComicsCompose"){ComicsCompose(viewModel, navHostController)}
+        composable("ComicsDetailsCompose"){ComicsDetailsCompose(viewModel,navHostController)}
+
 
     }
 }

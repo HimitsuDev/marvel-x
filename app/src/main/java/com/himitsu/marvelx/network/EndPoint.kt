@@ -34,4 +34,21 @@ interface EndPoint {
                   @Query("apikey") apikey: String = KeysRep.apikey,
                   @Query("hash") hash: String = KeysRep.hash): Call<ComicsData>
 
+
+    @GET("/v1/public/comics/{comicId}")
+    fun getComicsDetails(@Path("comicId")characterId: Int,
+                  @Query("ts") ts: Long = KeysRep.ts,
+                  @Query("apikey") apikey: String = KeysRep.apikey,
+                  @Query("hash") hash: String = KeysRep.hash): Call<ComicsData>
+
+
+    @GET("/v1/public/characters/{characterId}/comics")
+    fun getComicsYear(@Path("characterId")characterId: String,
+                  @Query("dateRange") dateRange: String,
+                  @Query("limit") limit: Int = 21,
+                  @Query("offset") offset: Int = 0,
+                  @Query("ts") ts: Long = KeysRep.ts,
+                  @Query("apikey") apikey: String = KeysRep.apikey,
+                  @Query("hash") hash: String = KeysRep.hash): Call<ComicsData>
+
 }

@@ -17,13 +17,14 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.NavController
+import com.himitsu.marvelx.compose.textSearch
 import com.himitsu.marvelx.model.ViewModelMarvel
 
 @Composable
 fun NavigationBarMarvel(viewModel: ViewModelMarvel, navController: NavController){
     var selectedItem by remember { mutableIntStateOf(0) }
-    val items = listOf("Home", "Preview", "Comics", "Series")
-    val iconsNavegation = listOf(Icons.Filled.Home, Icons.Filled.Face, Icons.Filled.Info, Icons.Filled.List)
+    val items = listOf("Home", "Preview", "Comics")
+    val iconsNavegation = listOf(Icons.Filled.Home, Icons.Filled.Face, Icons.Filled.Info)
 
     val id by viewModel.idCharactere.collectAsState()
 
@@ -41,6 +42,7 @@ fun NavigationBarMarvel(viewModel: ViewModelMarvel, navController: NavController
                         0 ->  navController.navigate("SelectCompose")
                         1 -> navController.navigate("CharacteresCompose")
                         2 -> {
+                            textSearch = ""
                             viewModel.getComics(id)
                             navController.navigate("ComicsCompose")
                         }

@@ -1,9 +1,10 @@
 package com.himitsu.marvelx.model
 
 import android.util.Log
-import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
+import com.himitsu.marvelx.compose.alertNaoEncontrado
 import com.himitsu.marvelx.data.Characters
 import com.himitsu.marvelx.data.comics.ComicsData
 import com.himitsu.marvelx.network.EndPoint
@@ -36,8 +37,11 @@ class ViewModelMarvel: ViewModel() {
     private val _loading = MutableStateFlow(false)
     var loading = _loading.asStateFlow()
 
+    private val _comicsDatails = MutableStateFlow(defaultComics())
+    var comicsDatails = _comicsDatails.asStateFlow()
 
-    fun getCharacters(id: String ) = viewModelScope.launch{
+
+    fun getCharacters(id: String, navController: NavController) = viewModelScope.launch{
         try {
             _loading.value = true
             val retrofitClient = NetworkUtils
@@ -50,15 +54,26 @@ class ViewModelMarvel: ViewModel() {
                         override fun onResponse(call: Call<Characters>, response: Response<Characters>) {
                             if (response.isSuccessful){
                                 response.body()?.let {
-                                    _marvelRepository.value = it
-                                    _idCharactere.value = it.data!!.results.first().id.toString()
-                                    Log.e("Verific", " esse é o resultado ${_marvelRepository.value.data}")
-                                    _loading.value = false
+                                    Log.e("response", " verdadeiro, ${it.data}")
+                                    if (it.data!!.results.isNotEmpty()) {
+                                        _marvelRepository.value = it
+
+                                        _idCharactere.value = it.data!!.results.first().id.toString()
+                                        _loading.value = false
+                                        alertNaoEncontrado = false
+                                        navController.navigate("CharacteresCompose")
+
+                                    } else {
+                                        Log.e("response", "vazia, tela de nao encontrado")
+                                        alertNaoEncontrado = true
+                                        navController.navigate("SelectCompose")
+                                    }
+
 
                                 }
                             } else {
                                 _loading.value = false
-                                Log.e("Verific", "response voltou null ${_marvelRepository.value.data}")
+                                Log.e("response", "false, response voltou null")
                             }
 
                         }
@@ -106,7 +121,6 @@ class ViewModelMarvel: ViewModel() {
                                 Log.e("Verific", "response voltou null")
                                 _loading.value = false
                             }
-
                         }
 
                         override fun onFailure(call: Call<Characters>, t: Throwable) {
@@ -167,6 +181,99 @@ class ViewModelMarvel: ViewModel() {
         }
     }
 
+
+    fun getComicsDetails(idComics: Int) = viewModelScope.launch {
+        try {
+            _loading.value = true
+            val retrofitClient = NetworkUtils
+                .getRetrofitInstance("https://gateway.marvel.com/")
+            val endPoint = retrofitClient.create(EndPoint::class.java)
+
+            withContext(Dispatchers.IO){
+                suspendCoroutine  { contination ->
+                    endPoint.getComicsDetails(idComics).enqueue(object : retrofit2.Callback<ComicsData> {
+                        override fun onResponse(call: Call<ComicsData>, response: Response<ComicsData>) {
+                            if (response.isSuccessful){
+                                response.body()?.let {
+                                    _comicsDatails.value = it
+                                    Log.e("Verific", " esse é o resultado ${_comicsDatails.value.data}")
+                                    _loading.value = false
+
+                                }
+                            } else {
+                                Log.e("Verific", "response voltou null ${_comicsDatails.value.data}")
+                                _loading.value = false
+                            }
+
+                        }
+
+                        override fun onFailure(call: Call<ComicsData>, t: Throwable) {
+                            Log.d("Error1", t.message.toString())
+                            contination.resumeWithException(t)
+                            _loading.value = false
+                        }
+                    })
+                }
+            }
+
+        }
+
+        catch (e: Exception) {
+            Log.d("Error2", e.message.toString())
+            _loading.value = false
+
+        }
+
+    }
+
+    fun getComicsYear(id: String, offSet: Int =0, year: String) = viewModelScope.launch {
+        val cleanedYear = year.replace(Regex("[^\\d]"), "")
+
+        try {
+            Log.e("Year", "tentou buscar pelo ano")
+            val newYear = cleanedYear + "-01-01," + (cleanedYear.toInt() + 1) + "-01-01"
+            Log.e("Year", "$newYear")
+
+            _loading.value = true
+            val retrofitClient = NetworkUtils
+                .getRetrofitInstance("https://gateway.marvel.com/")
+            val endPoint = retrofitClient.create(EndPoint::class.java)
+
+            withContext(Dispatchers.IO){
+                suspendCoroutine  { contination ->
+                    endPoint.getComicsYear(characterId = id, offset = offSet, dateRange = newYear).enqueue(object : retrofit2.Callback<ComicsData> {
+                        override fun onResponse(call: Call<ComicsData>, response: Response<ComicsData>) {
+                            if (response.isSuccessful){
+                                response.body()?.let {
+                                    _comics.value = it
+                                    Log.e("Verific", " esse é o resultado ${_comics.value.data}")
+                                    _loading.value = false
+
+                                }
+                            } else {
+                                Log.e("Verific", "response voltou null ${_comics.value.data}")
+                                _loading.value = false
+                            }
+
+                        }
+
+                        override fun onFailure(call: Call<ComicsData>, t: Throwable) {
+                            Log.d("Error1", t.message.toString())
+                            contination.resumeWithException(t)
+                            _loading.value = false
+                        }
+                    })
+                }
+            }
+
+        }
+
+        catch (e: Exception) {
+            Log.d("Error2 getComicsYear", e.message.toString())
+            _loading.value = false
+
+        }
+    }
 }
 
 fun defaultCharacters(): Characters{
