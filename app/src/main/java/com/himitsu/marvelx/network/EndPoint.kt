@@ -14,15 +14,15 @@ interface EndPoint {
     //TODO alterar a Key
     @GET("v1/public/characters")
     fun getCharacters(@Query("name") name: String,
-                      @Query("ts") ts: Long = KeysRep.ts,
-                      @Query("apikey") apikey: String = KeysRep.apikey,
-                      @Query("hash") hash: String = KeysRep.hash): Call<Characters>
+                      @Query("ts") ts: Long = KeysRep.generateTimestamp(),
+                      @Query("apikey") apikey: String = KeysRep.getApikey(),
+                      @Query("hash") hash: String = KeysRep.getHash()): Call<Characters>
 
 
     @GET("v1/public/characters")
-    fun getAllCharacteres(@Query("ts") ts: Long = KeysRep.ts,
-                          @Query("apikey") apikey: String = KeysRep.apikey,
-                          @Query("hash") hash: String = KeysRep.hash): Call<Characters>
+    fun getAllCharacteres(@Query("ts") ts: Long = KeysRep.generateTimestamp(),
+                          @Query("apikey") apikey: String = KeysRep.getApikey(),
+                          @Query("hash") hash: String = KeysRep.getHash()): Call<Characters>
 
 
 
@@ -30,16 +30,16 @@ interface EndPoint {
     fun getComics(@Path("characterId")characterId: String,
                   @Query("limit") limit: Int = 21,
                   @Query("offset") offset: Int = 0,
-                  @Query("ts") ts: Long = KeysRep.ts,
-                  @Query("apikey") apikey: String = KeysRep.apikey,
-                  @Query("hash") hash: String = KeysRep.hash): Call<ComicsData>
+                  @Query("ts") ts: Long = KeysRep.generateTimestamp(),
+                  @Query("apikey") apikey: String = KeysRep.getApikey(),
+                  @Query("hash") hash: String = KeysRep.getHash()): Call<ComicsData>
 
 
     @GET("/v1/public/comics/{comicId}")
     fun getComicsDetails(@Path("comicId")characterId: Int,
-                  @Query("ts") ts: Long = KeysRep.ts,
-                  @Query("apikey") apikey: String = KeysRep.apikey,
-                  @Query("hash") hash: String = KeysRep.hash): Call<ComicsData>
+                         @Query("ts") ts: Long = KeysRep.generateTimestamp(),
+                         @Query("apikey") apikey: String = KeysRep.getApikey(),
+                         @Query("hash") hash: String = KeysRep.getHash()): Call<ComicsData>
 
 
     @GET("/v1/public/characters/{characterId}/comics")
@@ -47,8 +47,8 @@ interface EndPoint {
                   @Query("dateRange") dateRange: String,
                   @Query("limit") limit: Int = 21,
                   @Query("offset") offset: Int = 0,
-                  @Query("ts") ts: Long = KeysRep.ts,
-                  @Query("apikey") apikey: String = KeysRep.apikey,
-                  @Query("hash") hash: String = KeysRep.hash): Call<ComicsData>
+                      @Query("ts") ts: Long = KeysRep.generateTimestamp(),
+                      @Query("apikey") apikey: String = KeysRep.getApikey(),
+                      @Query("hash") hash: String = KeysRep.getHash()): Call<ComicsData>
 
 }

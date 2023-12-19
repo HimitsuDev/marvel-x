@@ -6,12 +6,15 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.himitsu.marvelx.compose.alertNaoEncontrado
 import com.himitsu.marvelx.data.Characters
+import com.himitsu.marvelx.data.Comics
 import com.himitsu.marvelx.data.comics.ComicsData
 import com.himitsu.marvelx.network.EndPoint
 import com.himitsu.marvelx.network.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -40,7 +43,14 @@ class ViewModelMarvel: ViewModel() {
     private val _comicsDatails = MutableStateFlow(defaultComics())
     var comicsDatails = _comicsDatails.asStateFlow()
 
+    private val _link = MutableStateFlow("")
+    var link = _link.asStateFlow()
 
+
+    fun setLink(link: String){
+        _link.value = link
+    }
+    fun getLink() = link.value
     fun getCharacters(id: String, navController: NavController) = viewModelScope.launch{
         try {
             _loading.value = true
@@ -154,6 +164,7 @@ class ViewModelMarvel: ViewModel() {
                                     _comics.value = it
                                     Log.e("Verific", " esse é o resultado ${_comics.value.data}")
                                     _loading.value = false
+
 
                                 }
                             } else {

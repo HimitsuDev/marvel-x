@@ -11,10 +11,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -43,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.himitsu.marvelx.compose.components.FontMarvel
 import com.himitsu.marvelx.compose.components.NavigationBarMarvel
 import com.himitsu.marvelx.compose.components.loadCompose
 import com.himitsu.marvelx.data.comics.Result
@@ -65,7 +67,6 @@ fun ComicsCompose(viewModel: ViewModelMarvel, navController: NavController) {
         offSet = getComics.data!!.offset
     }
 
-
     Box(
         modifier = Modifier
             .background(
@@ -76,58 +77,42 @@ fun ComicsCompose(viewModel: ViewModelMarvel, navController: NavController) {
             .fillMaxSize()
     ) {
 
-        if(!loading) {
+        if (!loading) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally){
+                LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
+                    item { logoMarvel() }
+                    item { SeachPerDate(viewModel, navController) }
+                    item {
+                        LazyRow(state = rememberLazyListState()) {
+                            itemsIndexed(comics) { index, item ->
+                                ViewComics(item, navController, viewModel)
+                            }
 
+                            getComics.data?.let {
+                                if (it.count >= it.limit) {
+                                    item { ButtomQueryPlus(viewModel, offSet, navController) }
+                                }
+                            }
+                        }
+                    }
+                    item { FontMarvel() }
 
-        Column(modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+                }
+                Box(
+                    modifier = Modifier
 
+                        .fillMaxSize(),
+                    contentAlignment = Alignment.BottomCenter,
+                ) {
 
-        SeachPerDate(viewModel, navController)
-        LazyVerticalGrid(
-            verticalArrangement = Arrangement.Top,
-            columns = GridCells.Adaptive(minSize = 128.dp),
-            modifier = Modifier
-                .padding(bottom = 80.dp)
-                .wrapContentSize()
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(Color(0xFFFF0000), Color(0xFF9E171B))
-                    )
-                )
-
-
-        ) {
-            itemsIndexed(comics) { _, item ->
-                ViewComics(item, navController, viewModel)
-
-            }
-
-            ////////////////////////////
-            getComics.data?.let {
-                if(it.count >= it.limit){
-                    item { ButtomQueryPlus(viewModel, offSet, navController) }
+                    NavigationBarMarvel(viewModel, navController)
                 }
             }
 
-        }
-
-        }
-
-
-        Box(modifier = Modifier
-            .fillMaxSize(),
-            contentAlignment = Alignment.BottomCenter,
-        ) {
-
-            NavigationBarMarvel(viewModel, navController)
-        }
-
-    } else {
+        }  else {
             loadCompose()
         }
     }
-
 
 }
 
@@ -233,7 +218,6 @@ fun SeachPerDate(viewModel: ViewModelMarvel, navController: NavController){
         Icon(imageVector = Icons.Default.Search,
             contentDescription = null, tint = Color.White,
             modifier = Modifier
-                .padding(top = 3.dp)
                 .size(30.dp)
                 .clickable {
                     selectedDate = true

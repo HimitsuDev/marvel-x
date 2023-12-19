@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.himitsu.marvelx.compose.components.FontMarvel
 import com.himitsu.marvelx.compose.components.NavigationBarMarvel
 import com.himitsu.marvelx.compose.components.loadCompose
 import com.himitsu.marvelx.data.comics.Result
@@ -68,11 +70,14 @@ fun ComicsDetailsCompose(viewModel: ViewModelMarvel, navController: NavControlle
         ){
             LazyColumn(modifier = Modifier
                 .fillMaxSize()
-                .padding(bottom = 80.dp)
+                .padding(bottom = 80.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 itemsIndexed(comicsDetails){_, comics ->
                     comicsDetailsView(comics, viewModel, navController)
                 }
+                
+                item { FontMarvel() }
 
             }
             Box(
@@ -172,6 +177,34 @@ fun comicsDetailsView(comics: Result, viewModel: ViewModelMarvel,
             )
         }
 
+
+        Card(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 15.dp)
+        ) {
+            Box(modifier = Modifier
+                .fillMaxWidth(),
+                contentAlignment = Alignment.Center){
+                Text(text = "Marvel.com",
+                    textAlign = TextAlign.Center, fontSize = 24.sp)
+            }
+        }
+        Column(horizontalAlignment = Alignment.Start){
+            for (links in comics.urls) {
+                Row{
+                    Text(text = links.type + ":", color = Color.White, fontSize = 20.sp)
+                    Text(text = "Redirection to marvel.com", color = Color.White, fontSize = 18.sp,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .clickable {
+                            viewModel.setLink(links.url)
+                            navController.navigate("WebViewCompose")
+                        })
+                }
+
+            }
+        }
 
     }
 }

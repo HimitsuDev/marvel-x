@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.himitsu.marvelx.R
+import com.himitsu.marvelx.compose.components.FontMarvel
 import com.himitsu.marvelx.compose.components.NavigationBarMarvel
 import com.himitsu.marvelx.compose.components.loadCompose
 import com.himitsu.marvelx.data.Result
@@ -70,6 +71,7 @@ fun CharacteresCompose(viewModel: ViewModelMarvel,navController: NavController) 
                 itemsIndexed(characteres) { _, personagem ->
                     ViewPerson(personagem)
                 }
+                item { FontMarvel() }
             }
             Box(
                 contentAlignment = Alignment.BottomCenter,
@@ -121,8 +123,10 @@ fun ViewPerson(personagem: Result){
 
             }
         }
+
+
         ElevatedCard(colors =  CardDefaults.cardColors(
-            containerColor = Color.Red,
+            containerColor = Color(0xFF910B0B),
         ) ,
             elevation = CardDefaults.cardElevation(
                 defaultElevation = 6.dp

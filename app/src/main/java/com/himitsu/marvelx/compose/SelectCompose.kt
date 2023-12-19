@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
@@ -31,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
+import com.himitsu.marvelx.compose.components.FontMarvel
+import com.himitsu.marvelx.compose.components.SeachNameCharacter
 import com.himitsu.marvelx.data.sample.SampleCharacteres
 import com.himitsu.marvelx.data.sample.getlistSampleCharacteres
 import com.himitsu.marvelx.model.ViewModelMarvel
@@ -40,13 +43,12 @@ var alertNaoEncontrado by mutableStateOf(false)
 fun SelectCompose(viewModel: ViewModelMarvel, navController: NavController) {
     selectedDate = false
     textSearch = ""
-    var textSearch by remember { mutableStateOf("") }
 
     val listSampleCharacteres = getlistSampleCharacteres()
 
 
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally,
+    LazyColumn(horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 10.dp)
@@ -57,43 +59,28 @@ fun SelectCompose(viewModel: ViewModelMarvel, navController: NavController) {
             )
     ) {
 
-        logoMarvel()
-        Row(modifier = Modifier
-            .padding(bottom = 15.dp)
-        ){
-            OutlinedTextField(value = textSearch.take(30), onValueChange = {
-                textSearch = it },
-                maxLines = 1, label = { Text(text = "Character", color = Color.White) },
-                textStyle = TextStyle(color = Color.White, fontSize = 24.sp)
-            )
+        item { logoMarvel() }
+        item{ SeachNameCharacter(viewModel, navController) }
 
-
-            Icon(imageVector = Icons.Default.Search,
-                contentDescription = null, tint = Color.White,
-                modifier = Modifier
-                    .padding(top = 3.dp)
-                    .size(50.dp)
-                    .clickable {
-                        viewModel.getCharacters(textSearch, navController)
-                        navController.navigate("CharacteresCompose")
-                    }
-
-
-            )
-
-        }
-        if(alertNaoEncontrado){
-            Text(text = "Not found", fontSize = 24.sp, color = Color.Cyan,
-                modifier = Modifier.padding(bottom = 10.dp))
-        }
-        LazyRow(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            itemsIndexed(listSampleCharacteres) { _, personagens ->
-                RowCaracterView(personagens, navController, viewModel)
+        item{
+            if (alertNaoEncontrado) {
+                Text(
+                    text = "Not found", fontSize = 24.sp, color = Color.Cyan,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
             }
         }
+
+        item{
+            LazyRow {
+                itemsIndexed(listSampleCharacteres) { _, personagens ->
+                    RowCaracterView(personagens, navController, viewModel)
+                }
+
+            }
+        }
+        item { FontMarvel() }
+
 
     }
 }

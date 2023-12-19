@@ -17,6 +17,7 @@ import com.himitsu.marvelx.compose.CharacteresCompose
 import com.himitsu.marvelx.compose.ComicsCompose
 import com.himitsu.marvelx.compose.ComicsDetailsCompose
 import com.himitsu.marvelx.compose.SelectCompose
+import com.himitsu.marvelx.compose.components.WebViewCompose
 import com.himitsu.marvelx.model.ViewModelMarvel
 import com.himitsu.marvelx.ui.theme.MARVELXTheme
 
@@ -54,7 +55,7 @@ fun MyAppHost(navHostController: NavHostController = rememberNavController(),
         composable("ComicsCompose"){ ComicsCompose(viewModel, navHostController) }
         composable("ComicsCompose"){ComicsCompose(viewModel, navHostController)}
         composable("ComicsDetailsCompose"){ComicsDetailsCompose(viewModel,navHostController)}
-
+        composable("WebViewCompose"){WebViewCompose(navHostController, viewModel)}
 
     }
 }
