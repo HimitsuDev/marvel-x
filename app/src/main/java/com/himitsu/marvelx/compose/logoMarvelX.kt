@@ -7,8 +7,8 @@ import androidx.compose.ui.res.painterResource
 import com.himitsu.marvelx.R
 
 @Composable
-fun logoMarvel(){
-    Box(){
+fun LogoMarvel(){
+    Box{
         Image(painterResource(id = R.drawable.marvel_x_transparent), contentDescription = null)
     }
 }

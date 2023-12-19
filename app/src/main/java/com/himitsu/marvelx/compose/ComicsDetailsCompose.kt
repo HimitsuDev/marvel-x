@@ -47,7 +47,7 @@ fun ComicsDetailsCompose(viewModel: ViewModelMarvel, navController: NavControlle
         )
     ){
         val getComicsDetails by viewModel.comicsDatails.collectAsState()
-        var comicsDetails = mutableListOf<Result>()
+        val comicsDetails = mutableListOf<Result>()
         val loading by viewModel.loading.collectAsState()
 
 
@@ -74,7 +74,7 @@ fun ComicsDetailsCompose(viewModel: ViewModelMarvel, navController: NavControlle
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 itemsIndexed(comicsDetails){_, comics ->
-                    comicsDetailsView(comics, viewModel, navController)
+                    ComicsDetailsView(comics, viewModel, navController)
                 }
                 
                 item { FontMarvel() }
@@ -98,7 +98,7 @@ fun ComicsDetailsCompose(viewModel: ViewModelMarvel, navController: NavControlle
     }
 }
 @Composable
-fun comicsDetailsView(comics: Result, viewModel: ViewModelMarvel,
+fun ComicsDetailsView(comics: Result, viewModel: ViewModelMarvel,
                       navController: NavController){
 
     val creatorDetails = comics.creators.items

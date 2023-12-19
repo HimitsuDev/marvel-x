@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -59,7 +58,7 @@ fun ComicsCompose(viewModel: ViewModelMarvel, navController: NavController) {
     val loading by viewModel.loading.collectAsState()
 
 
-    Log.d("selectedDate, inicio compose", "${selectedDate}")
+    Log.d("selectedDate, inicio compose", "$selectedDate")
 
 
     getComics.data?.results?.let {
@@ -80,11 +79,11 @@ fun ComicsCompose(viewModel: ViewModelMarvel, navController: NavController) {
         if (!loading) {
             Column(horizontalAlignment = Alignment.CenterHorizontally){
                 LazyColumn(horizontalAlignment = Alignment.CenterHorizontally) {
-                    item { logoMarvel() }
+                    item { LogoMarvel() }
                     item { SeachPerDate(viewModel, navController) }
                     item {
                         LazyRow(state = rememberLazyListState()) {
-                            itemsIndexed(comics) { index, item ->
+                            itemsIndexed(comics) { _, item ->
                                 ViewComics(item, navController, viewModel)
                             }
 
@@ -158,11 +157,11 @@ fun ButtomQueryPlus(viewModel: ViewModelMarvel, offSet: Int, navController: NavC
         .clickable {
             if (!selectedDate) {
                 viewModel.getComics(id, offSet = newOffSet)
-                Log.d("selectedDate getComics", "${selectedDate}")
+                Log.d("selectedDate getComics", "$selectedDate")
 
             } else {
                 viewModel.getComicsYear(id, offSet = newOffSet, year = textSearch)
-                Log.d("selectedDate getComicsYear", "${selectedDate}")
+                Log.d("selectedDate getComicsYear", "$selectedDate")
 
             }
 
@@ -224,7 +223,7 @@ fun SeachPerDate(viewModel: ViewModelMarvel, navController: NavController){
                     Log.d("_year, clicado", textSearch)
                     viewModel.getComicsYear(id, year = textSearch)
                     navController.navigate("ComicsCompose")
-                    Log.d("selectedDate, clicado", "${selectedDate}")
+                    Log.d("selectedDate, clicado", "$selectedDate")
                 }
 
 

@@ -59,15 +59,16 @@ fun CharacteresCompose(viewModel: ViewModelMarvel,navController: NavController) 
             if(!loading) {
 
             LazyColumn(
-                horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
+                 modifier = Modifier
                     .padding(bottom = 80.dp)
                     .background(
                         brush = Brush.radialGradient(
                             colors = listOf(Color(0xFFFF0000), Color(0xFF9E171B))
                         )
-                    )
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                item { logoMarvel() }
+                item { LogoMarvel() }
                 itemsIndexed(characteres) { _, personagem ->
                     ViewPerson(personagem)
                 }

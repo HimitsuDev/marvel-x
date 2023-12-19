@@ -6,15 +6,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.himitsu.marvelx.compose.alertNaoEncontrado
 import com.himitsu.marvelx.data.Characters
-import com.himitsu.marvelx.data.Comics
 import com.himitsu.marvelx.data.comics.ComicsData
 import com.himitsu.marvelx.network.EndPoint
 import com.himitsu.marvelx.network.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Call
@@ -28,8 +25,8 @@ class ViewModelMarvel: ViewModel() {
     private val _marvelRepository = MutableStateFlow(defaultCharacters())
     var marvelRepository = _marvelRepository.asStateFlow()
 
-    private val _marvelAllCharacteres = MutableStateFlow(defaultCharacters())
-    var marvelAllCharacteres = _marvelAllCharacteres.asStateFlow()
+//    private val _marvelAllCharacteres = MutableStateFlow(defaultCharacters())
+//    var marvelAllCharacteres = _marvelAllCharacteres.asStateFlow()
 
     private val _comics = MutableStateFlow(defaultComics())
     var comics = _comics.asStateFlow()
@@ -108,45 +105,45 @@ class ViewModelMarvel: ViewModel() {
     }
 
 
-    fun getAllCharacteres() = viewModelScope.launch {
-        try {
-            _loading.value = true
-            Log.d("startGet", "iniciou getlAllCharacteres")
-            val retrofitClient = NetworkUtils
-                .getRetrofitInstance("https://gateway.marvel.com/")
-            val endPoint = retrofitClient.create(EndPoint::class.java)
-
-            withContext(Dispatchers.IO){
-                suspendCoroutine  { contination ->
-                    endPoint.getAllCharacteres().enqueue(object : retrofit2.Callback<Characters> {
-                        override fun onResponse(call: Call<Characters>, response: Response<Characters>) {
-                            if (response.isSuccessful){
-                                response.body()?.let {
-                                    _marvelAllCharacteres.value = it
-                                    Log.e("Verific", " esse é o resultado ${_marvelAllCharacteres.value.data}")
-                                    _loading.value = false
-
-                                }
-                            } else {
-                                Log.e("Verific", "response voltou null")
-                                _loading.value = false
-                            }
-                        }
-
-                        override fun onFailure(call: Call<Characters>, t: Throwable) {
-                            Log.d("Error1", t.message.toString())
-                            contination.resumeWithException(t)
-                            _loading.value = false
-                        }
-                    })
-                }
-            }
-
-        } catch (e: Exception){
-            Log.d("Error2", e.message.toString())
-            _loading.value = false
-        }
-    }
+//    fun getAllCharacteres() = viewModelScope.launch {
+//        try {
+//            _loading.value = true
+//            Log.d("startGet", "iniciou getlAllCharacteres")
+//            val retrofitClient = NetworkUtils
+//                .getRetrofitInstance("https://gateway.marvel.com/")
+//            val endPoint = retrofitClient.create(EndPoint::class.java)
+//
+//            withContext(Dispatchers.IO){
+//                suspendCoroutine  { contination ->
+//                    endPoint.getAllCharacteres().enqueue(object : retrofit2.Callback<Characters> {
+//                        override fun onResponse(call: Call<Characters>, response: Response<Characters>) {
+//                            if (response.isSuccessful){
+//                                response.body()?.let {
+//                                    _marvelAllCharacteres.value = it
+//                                    Log.e("Verific", " esse é o resultado ${_marvelAllCharacteres.value.data}")
+//                                    _loading.value = false
+//
+//                                }
+//                            } else {
+//                                Log.e("Verific", "response voltou null")
+//                                _loading.value = false
+//                            }
+//                        }
+//
+//                        override fun onFailure(call: Call<Characters>, t: Throwable) {
+//                            Log.d("Error1", t.message.toString())
+//                            contination.resumeWithException(t)
+//                            _loading.value = false
+//                        }
+//                    })
+//                }
+//            }
+//
+//        } catch (e: Exception){
+//            Log.d("Error2", e.message.toString())
+//            _loading.value = false
+//        }
+//    }
 
     fun getComics(id: String, offSet: Int =0) = viewModelScope.launch {
         try {
@@ -238,12 +235,12 @@ class ViewModelMarvel: ViewModel() {
     }
 
     fun getComicsYear(id: String, offSet: Int =0, year: String) = viewModelScope.launch {
-        val cleanedYear = year.replace(Regex("[^\\d]"), "")
+        val cleanedYear = year.replace(Regex("\\D"), "")
 
         try {
             Log.e("Year", "tentou buscar pelo ano")
             val newYear = cleanedYear + "-01-01," + (cleanedYear.toInt() + 1) + "-01-01"
-            Log.e("Year", "$newYear")
+            Log.e("Year", newYear)
 
             _loading.value = true
             val retrofitClient = NetworkUtils
